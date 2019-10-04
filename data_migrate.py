@@ -1,8 +1,9 @@
-import pandas as pd
 import glob
-from sqlalchemy import create_engine
-from sklearn.model_selection import train_test_split
+import os
 
+import pandas as pd
+import pyexasol
+from sqlalchemy import create_engine
 
 engine = create_engine("mysql+pymysql://root:testsql@localhost/testing")
 
