@@ -8,95 +8,43 @@
 from django.db import models
 
 
-class Customers(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    customer_id = models.TextField(primary_key=True, null=False)
-    customer_unique_id = models.TextField(blank=True, null=True)
-    customer_zip_code_prefix = models.BigIntegerField(blank=True, null=True)
-    customer_city = models.TextField(blank=True, null=True)
-    customer_state = models.TextField(blank=True, null=True)
+class Aisles(models.Model):
+    aisle_id = models.AutoField(primary_key=True)
+    aisle = models.CharField(max_length=200)
 
     class Meta:
         managed = False
-        db_table = 'customers'
+        db_table = 'aisles'
 
 
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
-class Geolocation(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    geolocation_zip_code_prefix = models.BigIntegerField(primary_key=True, null=False)
-    geolocation_lat = models.FloatField(blank=True, null=True)
-    geolocation_lng = models.FloatField(blank=True, null=True)
-    geolocation_city = models.TextField(blank=True, null=True)
-    geolocation_state = models.TextField(blank=True, null=True)
+class Departments(models.Model):
+    department_id = models.AutoField(primary_key=True)
+    department = models.CharField(max_length=200)
 
     class Meta:
         managed = False
-        db_table = 'geolocation'
+        db_table = 'departments'
 
 
-class OrderItems(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    order_id = models.TextField(blank=True, null=True)
-    order_item_id = models.BigIntegerField(primary_key=True, null=False)
-    product_id = models.TextField(blank=True, null=True)
-    seller_id = models.TextField(blank=True, null=True)
-    shipping_limit_date = models.TextField(blank=True, null=True)
-    price = models.FloatField(blank=True, null=True)
-    freight_value = models.FloatField(blank=True, null=True)
+class OrderProducts(models.Model):
+    order_id = models.IntegerField()
+    product_id = models.IntegerField()
+    add_to_cart_order = models.IntegerField(blank=True, null=True)
+    reordered = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'order_items'
-
-
-class OrderPayments(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    order_id = models.TextField(blank=True, null=True)
-    payment_sequential = models.BigIntegerField(primary_key=True, null=False)
-    payment_type = models.TextField(blank=True, null=True)
-    payment_installments = models.BigIntegerField(blank=True, null=True)
-    payment_value = models.FloatField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'order_payments'
-
-
-class OrderReviews(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    review_id = models.TextField(primary_key=True,null=False)
-    order_id = models.TextField(blank=True, null=True)
-    review_score = models.TextField(blank=True, null=True)
-    review_comment_title = models.TextField(blank=True, null=True)
-    review_comment_message = models.TextField(blank=True, null=True)
-    review_creation_date = models.TextField(blank=True, null=True)
-    review_answer_timestamp = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'order_reviews'
+        db_table = 'order_products'
 
 
 class Orders(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    order_id = models.TextField(primary_key=True, null=False)
-    customer_id = models.TextField(blank=True, null=True)
-    order_status = models.TextField(blank=True, null=True)
-    order_purchase_timestamp = models.TextField(blank=True, null=True)
-    order_approved_at = models.TextField(blank=True, null=True)
-    order_delivered_carrier_date = models.TextField(blank=True, null=True)
-    order_delivered_customer_date = models.TextField(blank=True, null=True)
-    order_estimated_delivery_date = models.TextField(blank=True, null=True)
+    order_id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField()
+    order_number = models.IntegerField(blank=True, null=True)
+    order_dow = models.IntegerField(blank=True, null=True)
+    order_hour_of_day = models.IntegerField(blank=True, null=True)
+    days_since_prior_order = models.IntegerField(blank=True, null=True)
+    order_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -104,28 +52,11 @@ class Orders(models.Model):
 
 
 class Products(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    product_id = models.TextField(primary_key=True,null=False)
-    product_category_name = models.TextField(blank=True, null=True)
-    product_name_lenght = models.FloatField(blank=True, null=True)
-    product_description_lenght = models.FloatField(blank=True, null=True)
-    product_photos_qty = models.FloatField(blank=True, null=True)
-    product_weight_g = models.FloatField(blank=True, null=True)
-    product_length_cm = models.FloatField(blank=True, null=True)
-    product_height_cm = models.FloatField(blank=True, null=True)
-    product_width_cm = models.FloatField(blank=True, null=True)
+    product_id = models.AutoField(primary_key=True)
+    product_name = models.TextField(blank=True, null=True)
+    aisle = models.ForeignKey(Aisles, models.DO_NOTHING, blank=True, null=True)
+    department = models.ForeignKey(Departments, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'products'
-
-class Sellers(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    seller_id = models.TextField(primary_key=True,null=False)
-    seller_zip_code_prefix = models.BigIntegerField(blank=True, null=True)
-    seller_city = models.TextField(blank=True, null=True)
-    seller_state = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'sellers'
