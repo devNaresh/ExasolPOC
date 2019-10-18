@@ -1,44 +1,57 @@
 import graphene
-from graphene import relay,ObjectType
+from graphene import relay, ObjectType
 from graphene_django.types import DjangoObjectType
 
-from entities.models import Aisles,Departments,Products,OrderProducts,Orders
+from entities.models import Aisles, Departments, Products, OrderProducts, Orders
 from graphene_django.filter import DjangoFilterConnectionField
+from entities import mutations
+
 
 class AisleNode(DjangoObjectType):
     class Meta:
         model = Aisles
-        filter_fields = []
+        # filter_fields=[]
+        filter_fields = {
+            'aisle': ['exact', 'icontains', 'istartswith']
+        }
         interfaces = (relay.Node,)
+
+
 class DepartmentNode(DjangoObjectType):
     class Meta:
         model = Departments
-        filter_fields=[]
+        filter_fields = []
         interfaces = (relay.Node,)
+
+
 class ProductNode(DjangoObjectType):
     class Meta:
         model = Products
         filter_fields = []
-        interfaces =(relay.Node,)
+        interfaces = (relay.Node,)
+
 
 class OrderProductNode(DjangoObjectType):
     class Meta:
-        model= OrderProducts
+        model = OrderProducts
         filter_fields = []
         interfaces = (relay.Node,)
+
 
 class OrderNode(DjangoObjectType):
     class Meta:
         model = Orders
-        filter_fields = ['order_dow', 'order_hour_of_day', 'days_since_prior_order']
+        filter_fields = ['order_dow',
+                         'order_hour_of_day', 'days_since_prior_order']
         interfaces = (relay.Node,)
+
 
 class Query(ObjectType):
     product = relay.Node.Field(ProductNode)
     all_products = DjangoFilterConnectionField(ProductNode)
 
     aisle = relay.Node.Field(AisleNode)
-    all_aisle= DjangoFilterConnectionField(AisleNode)
+    all_aisle = DjangoFilterConnectionField(AisleNode)
 
     order = relay.Node.Field(OrderNode)
     all_orders = DjangoFilterConnectionField(OrderNode)
@@ -50,7 +63,12 @@ class Query(ObjectType):
     all_departments = DjangoFilterConnectionField(DepartmentNode)
 
 
+class Mutations(ObjectType):
+    asileMutation = mutations.AislesMutation.Field()
+    orderProductMutation = mutations.OrderProductsMutation.Field()
+    departmentMutaion = mutations.DepartmentsMutation.Field()
+    ordersMutation = mutations.OrdersMutation.Field()
+    productMutation = mutations.ProductsMutation.Field()
 
 
-
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutations)

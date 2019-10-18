@@ -10,7 +10,7 @@ from django.db import models
 
 class Aisles(models.Model):
     aisle_id = models.AutoField(primary_key=True)
-    aisle = models.CharField(max_length=200)
+    aisle = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -19,7 +19,7 @@ class Aisles(models.Model):
 
 class Departments(models.Model):
     department_id = models.AutoField(primary_key=True)
-    department = models.CharField(max_length=200)
+    department = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -27,8 +27,8 @@ class Departments(models.Model):
 
 
 class OrderProducts(models.Model):
-    order_id = models.IntegerField()
-    product_id = models.IntegerField()
+    order_id = models.IntegerField(blank=True, null=True)
+    product_id = models.IntegerField(blank=True, null=True)
     add_to_cart_order = models.IntegerField(blank=True, null=True)
     reordered = models.IntegerField(blank=True, null=True)
 
@@ -39,12 +39,12 @@ class OrderProducts(models.Model):
 
 class Orders(models.Model):
     order_id = models.AutoField(primary_key=True)
-    user_id = models.IntegerField()
+    user_id = models.IntegerField(blank=True, null=True)
+    eval_set = models.TextField(blank=True, null=True)
     order_number = models.IntegerField(blank=True, null=True)
     order_dow = models.IntegerField(blank=True, null=True)
     order_hour_of_day = models.IntegerField(blank=True, null=True)
     days_since_prior_order = models.IntegerField(blank=True, null=True)
-    order_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -54,8 +54,8 @@ class Orders(models.Model):
 class Products(models.Model):
     product_id = models.AutoField(primary_key=True)
     product_name = models.TextField(blank=True, null=True)
-    aisle = models.ForeignKey(Aisles, models.DO_NOTHING, blank=True, null=True)
-    department = models.ForeignKey(Departments, models.DO_NOTHING, blank=True, null=True)
+    aisle_id = models.BigIntegerField(blank=True, null=True)
+    department_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
