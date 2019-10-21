@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'entities',
-    'graphene_django'
+    'django_celery_beat',
+    'graphene_django',
+    'entities'
 ]
 
 MIDDLEWARE = [
@@ -81,10 +82,10 @@ WSGI_APPLICATION = 'analytics_server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'poc',
+        'NAME': 'testing',
         'USER': 'root',
-        'PASSWORD': 'Rajendra@423',
-        'HOST': 'localhost',
+        'PASSWORD': 'testsql',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
         }
 }
@@ -130,3 +131,5 @@ STATIC_URL = '/static/'
 GRAPHENE = {
     'SCHEMA': 'analytics_server.schema.schema'
 }
+
+CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
