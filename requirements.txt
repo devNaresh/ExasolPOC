@@ -1,6 +1,6 @@
 aniso8601==7.0.0
 Click==7.0
-Django==2.2.6
+Django==2.2.24
 django-filter==2.2.0
 Flask==1.1.1
 Flask-GraphQL==2.0.0
