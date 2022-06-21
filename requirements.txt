@@ -15,7 +15,7 @@ itsdangerous==1.1.0
 Jinja2==2.10.1
 MarkupSafe==1.1.1
 mysqlclient==1.4.4
-numpy==1.17.2
+numpy==1.22.0
 pandas==0.25.1
 promise==2.2.1
 pyasn1==0.4.7
